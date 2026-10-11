@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+    <meta name="theme-color" content="#00a1e0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Ultimate Revision">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ultimate Revision</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="appShell" class="app-shell">
+      <aside class="sidebar" aria-label="Study topics">
+        <button id="sidebarToggleBtn" class="sidebar-toggle-btn" type="button" aria-label="Collapse topics panel" aria-expanded="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5-1.4 1.4L6.2 12l7.9-7.9 1.4 1.4Z"/></svg>
+        </button>
+        <div class="brand">
+          <div class="brand-mark">UR</div>
+          <div>
+            <p class="eyebrow">Last-hour prep</p>
+            <h1>Ultimate Revision</h1>
+          </div>
+        </div>
+
+        <details id="progressMenu" class="progress-menu" open>
+          <summary>
+            <span>Progress</span>
+            <strong id="mobileProgressSummary">0 reviewed</strong>
+          </summary>
+          <div class="meter-card" role="group" aria-label="Filter by progress">
+            <button id="filterReviewedBtn" class="meter-btn" type="button" aria-pressed="false" title="Filter by Reviewed">
+              <span id="reviewedCount">0</span>
+              <small>reviewed</small>
+            </button>
+            <button id="filterStarredBtn" class="meter-btn" type="button" aria-pressed="false" title="Filter by Starred">
+              <span id="starredCount">0</span>
+              <small>starred</small>
+            </button>
+            <button id="filterWeakBtn" class="meter-btn" type="button" aria-pressed="false" title="Filter by Need Revision">
+              <span id="weakCount">0</span>
+              <small>revise</small>
+            </button>
+          </div>
+          <div id="activeProgressFilterBar" class="active-filter-bar hidden">
+            <span id="activeFilterLabel">Showing: Revise</span>
+            <button id="clearProgressFilterBtn" class="clear-filter-btn" type="button">Show all</button>
+          </div>
+          <button id="resetProgressBtn" class="reset-progress-chip" type="button">Reset progress</button>
+        </details>
+
+        <div class="topic-control-row">
+          <button id="mobileTopicToggle" class="mobile-topic-toggle" type="button" aria-expanded="false" aria-controls="topicList">
+            <span>Topics</span>
+            <strong>All</strong>
+          </button>
+          <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-pressed="false" aria-label="Enable dark mode">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A7.7 7.7 0 0 1 9.6 4a8.2 8.2 0 1 0 10.4 10.4Z"/></svg>
+            <span>Dark</span>
+          </button>
+        </div>
+        <nav id="topicList" class="topic-list"></nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div id="searchWrap" class="search-wrap">
+            <button id="mobileSearchToggle" class="mobile-search-toggle" aria-label="Open search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.8 4.5a6.3 6.3 0 1 1 0 12.6 6.3 6.3 0 0 1 0-12.6Zm0 1.8a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm4.5 9 4.2 4.2-1.3 1.3-4.2-4.2 1.3-1.3Z"/></svg>
+            </button>
+            <svg class="desktop-search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.8 4.5a6.3 6.3 0 1 1 0 12.6 6.3 6.3 0 0 1 0-12.6Zm0 1.8a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm4.5 9 4.2 4.2-1.3 1.3-4.2-4.2 1.3-1.3Z"/></svg>
+            <input id="searchInput" type="search" placeholder="Search Apex, LWC lifecycle, security model..." autocomplete="off">
+            <span id="offlineStatus" class="offline-status">Online</span>
+          </div>
+
+          <button id="mobileModeToggle" class="mobile-mode-toggle" type="button" aria-expanded="false" aria-controls="modeTabs">
+            <span>Mode</span>
+            <strong>Browse</strong>
+          </button>
+          <div id="modeTabs" class="mode-tabs" role="tablist" aria-label="Study mode">
+            <button class="mode-btn active" data-mode="browse">Browse</button>
+            <button class="mode-btn" data-mode="sprint">Sprint</button>
+            <button class="mode-btn" data-mode="plan">Plan</button>
+            <button class="mode-btn" data-mode="cheatsheet">Cheat</button>
+            <button id="tourBtn" class="tour-btn" type="button" aria-label="Open mode tour">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm-.1 3.2c1.7 0 3 .9 3 2.4 0 1-.5 1.6-1.4 2.2-.7.5-.9.8-.9 1.5v.4h-1.9v-.5c0-1.1.4-1.7 1.3-2.4.7-.5 1-.8 1-1.3 0-.5-.4-.8-1.1-.8-.8 0-1.2.4-1.3 1.2l-1.9-.3c.2-1.4 1.4-2.4 3.2-2.4Zm-1.3 7.5h2.1v2h-2.1v-2Z"/></svg>
+              <span>Tour</span>
+            </button>
+          </div>
+        </header>
+
+        <div id="planBackdrop" class="plan-backdrop hidden" aria-hidden="true"></div>
+        <div id="mobileSheetBackdrop" class="mobile-sheet-backdrop hidden" aria-hidden="true"></div>
+        <section id="studyLayout" class="study-layout">
+          <div id="studyInfoSheet" class="study-info peek">
+            <div id="sheetDragHandle" class="sheet-drag-handle" role="button" aria-label="Expand flashcard details" tabindex="0">
+              <span class="sheet-drag-bar"></span>
+            </div>
+            <section id="planPanel" class="plan-panel hidden" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+              <div class="plan-modal-head">
+                <div>
+                  <div class="plan-tab-row" role="tablist" aria-label="Plan duration">
+                    <button id="planSprint15Btn" class="plan-tab-btn active" type="button" data-plan="sprint15">15-Min Sprint</button>
+                    <button id="planPlan60Btn" class="plan-tab-btn" type="button" data-plan="plan60">60-Min Plan</button>
+                  </div>
+                  <p class="eyebrow" id="planEyebrow">15-minute interview sprint</p>
+                  <h3 id="planTitle">Admin and Security</h3>
+                </div>
+                <button id="planCloseBtn" class="icon-btn plan-close-btn" type="button" aria-label="Close plan">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg>
+                </button>
+              </div>
+              <div class="plan-intro">
+                <p id="planDescription">Start with platform fundamentals and access control.</p>
+              </div>
+              <div class="timer-card">
+                <strong id="planTimer">10:00</strong>
+                <span id="planProgress">Block 1 of 7</span>
+              </div>
+              <div class="prompt-actions">
+                <button id="prevPlanBtn" class="text-btn">Previous block</button>
+                <button id="nextPlanBtn" class="text-btn">Next block</button>
+                <button id="timerToggleBtn" class="primary-btn">Start timer</button>
+                <button id="timerResetBtn" class="text-btn">Reset</button>
+              </div>
+              <div id="planBlocks" class="plan-blocks"></div>
+            </section>
+
+            <section id="recallPanel" class="recall-panel hidden">
+              <div>
+                <p class="eyebrow" id="recallPromptMeta">Flashcard 1 of 1</p>
+                <h3 id="recallQuestion">Explain this topic before opening the note.</h3>
+              </div>
+              <div class="prompt-actions">
+                <button id="prevPromptBtn" class="text-btn">Previous</button>
+                <button id="nextPromptBtn" class="text-btn">Next prompt</button>
+                <button id="revealBtn" class="primary-btn">Reveal material</button>
+              </div>
+            </section>
+
+            <section id="flashcardPanel" class="flashcard-panel">
+              <div class="flashcard-copy">
+                <p class="eyebrow" id="flashcardMeta">Flashcard 1 of 1</p>
+                <h3 id="flashcardQuestion">Loading prompt...</h3>
+              </div>
+              <div class="prompt-actions">
+                <button id="shufflePromptBtn" class="text-btn">Another prompt</button>
+                <button id="checklistToggleBtn" class="text-btn">Show checklist</button>
+                <button id="startRecallBtn" class="primary-btn">Try from memory</button>
+              </div>
+              <div id="answerChecklist" class="answer-checklist hidden">
+                <p class="eyebrow">Answer checklist</p>
+                <ul id="answerChecklistItems"></ul>
+              </div>
+            </section>
+          </div>
+
+          <section class="stage-wrap">
+            <section class="hero-strip">
+              <div>
+                <p class="eyebrow" id="activeTopicLabel">All topics</p>
+                <h2 id="assetTitle">Loading study set</h2>
+              </div>
+            </section>
+
+            <div class="stage-toolbar">
+              <div class="asset-meta">
+                <span id="assetTopic">Topic</span>
+                <span id="assetPosition">0 / 0</span>
+              </div>
+              <div class="tool-buttons">
+                <button id="fitSheetBtn" class="text-btn active">Full sheet</button>
+                <button id="fitWidthBtn" class="text-btn">Fit width</button>
+                <button id="zoomOutBtn" class="icon-btn" title="Zoom out" aria-label="Zoom out">
+                  <svg viewBox="0 0 24 24"><path d="M5 11h14v2H5v-2Z"/></svg>
+                </button>
+                <button id="zoomResetBtn" class="text-btn">100%</button>
+                <button id="zoomInBtn" class="icon-btn" title="Zoom in" aria-label="Zoom in">
+                  <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+                </button>
+                <button id="openBtn" class="text-btn" type="button" hidden aria-hidden="true" tabindex="-1">Open</button>
+              </div>
+            </div>
+
+            <div class="mobile-stage-info">
+              <p class="mobile-swipe-hint">Right: Revise / Left: Reviewed</p>
+              <div id="assetStatusChip" class="asset-status-chip hidden" aria-live="polite"></div>
+            </div>
+            <div id="viewer" class="viewer">
+              <button id="zoomHud" class="zoom-hud hidden" type="button" aria-label="Reset zoom to 100%">
+                <span id="zoomHudValue">100%</span>
+                <span class="zoom-hud-reset">Reset</span>
+              </button>
+              <img id="assetImage" alt="">
+              <iframe id="assetPdf" title="PDF preview"></iframe>
+              <button id="prevBtn" class="viewer-nav-btn viewer-nav-prev" title="Previous item" aria-label="Previous item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5-1.4 1.4L6.2 12l7.9-7.9 1.4 1.4Z"/></svg>
+              </button>
+              <button id="nextBtn" class="viewer-nav-btn viewer-nav-next" title="Next item" aria-label="Next item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 18.5 6.5-6.5-6.5-6.5 1.4-1.4 7.9 7.9-7.9 7.9-1.4-1.4Z"/></svg>
+              </button>
+              <div class="watermark-layer" aria-hidden="true">
+                <span>Ultimate Revision</span>
+                <span>Ultimate Revision</span>
+                <span>Ultimate Revision</span>
+                <span>Ultimate Revision</span>
+                <span>Ultimate Revision</span>
+                <span>Ultimate Revision</span>
+              </div>
+            </div>
+            <div id="emptyStage" class="empty-stage hidden" role="status" aria-live="polite">
+              <div>
+                <p>No matching material</p>
+                <span>Try a broader search term or choose another topic.</span>
+              </div>
+            </div>
+            <section class="study-actions" aria-label="Progress controls">
+              <button id="reviewedBtn" class="action-btn">
+                <span class="status-dot reviewed"></span>
+                Reviewed
+              </button>
+              <button id="starBtn" class="action-btn">
+                <span class="status-dot starred"></span>
+                Star
+              </button>
+              <button id="weakBtn" class="action-btn">
+                <span class="status-dot weak"></span>
+                Need revision
+              </button>
+            </section>
+            <button id="mobileFullscreenBtn" class="mobile-fullscreen-btn" aria-label="Open fullscreen viewer" title="Fullscreen">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6v2H8.4l3.4 3.4-1.4 1.4L7 8.4V11H5V5Zm8 0h6v6h-2V8.4l-3.4 3.4-1.4-1.4L15.6 7H13V5Zm-2.6 7.2 1.4 1.4L8.4 17H11v2H5v-6h2v2.6l3.4-3.4Zm3.2 0 3.4 3.4V13h2v6h-6v-2h2.6l-3.4-3.4 1.4-1.4Z"/></svg>
+            </button>
+            <div id="mobileViewerOverlay" class="mobile-viewer-overlay">
+              <div>
+                <p id="mobileAssetMeta">Topic</p>
+                <h2 id="mobileAssetTitle">Loading study set</h2>
+              </div>
+            </div>
+            <div id="decisionToast" class="decision-toast" aria-live="polite"></div>
+            <section id="completionPanel" class="completion-panel hidden" aria-live="polite">
+              <p class="eyebrow">Round complete</p>
+              <h2>Topic pass complete.</h2>
+              <p id="completionSummary">This topic is complete. Choose what to study next.</p>
+              <div class="completion-actions">
+                <button id="nextTopicBtn" class="primary-btn" type="button">Next topic</button>
+                <button id="continueRoundBtn" class="text-btn" type="button">Start over</button>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <section id="cheatSheetPanel" class="cheatsheet-panel hidden">
+          <div class="section-head">
+            <h2>Cheat Sheet Scan</h2>
+            <p id="cheatSheetSummary">0 prompts</p>
+          </div>
+          <div id="cheatSheetGrid" class="cheatsheet-grid"></div>
+        </section>
+
+        <section id="queueSection">
+          <div class="section-head">
+            <h2>Study Queue</h2>
+            <p id="queueSummary">0 items</p>
+          </div>
+          <div id="assetGrid" class="asset-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <nav id="bottomDock" class="bottom-dock" aria-label="Mobile controls">
+      <button id="dockTopicBtn" class="dock-btn dock-topic-btn" type="button" aria-label="Open topics">
+        <span id="dockTopicIcon" class="dock-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 4h4v4H7V4Zm6 0h4v4h-4V4ZM7 10h4v4H7v-4Zm6 0h4v4h-4v-4ZM7 16h4v4H7v-4Zm6 0h4v4h-4v-4Z"/></svg>
+        </span>
+        <span id="dockTopicLabel" class="dock-label">All</span>
+      </button>
+      <button id="dockPrevBtn" class="dock-btn dock-nav-btn" type="button" aria-label="Previous item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5-1.4 1.4L6.2 12l7.9-7.9 1.4 1.4Z"/></svg>
+      </button>
+      <button id="dockCenterBtn" class="dock-center-pill" type="button" aria-label="Toggle flashcard prompt">
+        <span id="dockCenterProgress">1 / 93</span>
+        <small id="dockCenterHint">Prompt</small>
+      </button>
+      <button id="dockNextBtn" class="dock-btn dock-nav-btn" type="button" aria-label="Next item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 18.5 6.5-6.5-6.5-6.5 1.4-1.4 7.9 7.9-7.9 7.9-1.4-1.4Z"/></svg>
+      </button>
+      <button id="dockModeBtn" class="dock-btn dock-mode-btn" type="button" aria-label="Change study mode">
+        <span id="dockModeIcon" class="dock-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg>
+        </span>
+        <span id="dockModeLabel" class="dock-label">Browse</span>
+      </button>
+    </nav>
+
+    <div id="tourModal" class="tour-modal hidden" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-hidden="true">
+      <div class="tour-panel">
+        <div class="tour-head">
+          <div>
+            <p class="eyebrow">Quick tour</p>
+            <h2 id="tourTitle">Pick the right study mode</h2>
+          </div>
+          <button id="tourCloseBtn" class="icon-btn tour-close-btn" type="button" aria-label="Close tour">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg>
+          </button>
+        </div>
+        <div id="tourCards" class="tour-cards"></div>
+        <div class="tour-foot">
+          <button id="tourLaterBtn" class="text-btn" type="button">Close</button>
+          <button id="tourStartBtn" class="primary-btn" type="button">Start browsing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="fullscreenModal" class="fullscreen-modal hidden" aria-hidden="true">
+      <div class="fullscreen-bar">
+        <div>
+          <p id="fullscreenMeta">Image</p>
+          <h2 id="fullscreenTitle">Study item</h2>
+        </div>
+        <button id="fullscreenCloseBtn" class="icon-btn" aria-label="Close fullscreen viewer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg>
+        </button>
+      </div>
+      <div id="fullscreenViewer" class="fullscreen-viewer">
+        <img id="fullscreenImage" alt="">
+        <iframe id="fullscreenPdf" title="Fullscreen PDF preview"></iframe>
+        <div class="watermark-layer" aria-hidden="true">
+          <span>Ultimate Revision</span>
+          <span>Ultimate Revision</span>
+          <span>Ultimate Revision</span>
+          <span>Ultimate Revision</span>
+          <span>Ultimate Revision</span>
+          <span>Ultimate Revision</span>
+        </div>
+      </div>
+      <div class="fullscreen-nav">
+        <button id="fullscreenPrevBtn" class="icon-btn" aria-label="Previous item">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5-1.4 1.4L6.2 12l7.9-7.9 1.4 1.4Z"/></svg>
+        </button>
+        <button id="fullscreenNextBtn" class="icon-btn" aria-label="Next item">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 18.5 6.5-6.5-6.5-6.5 1.4-1.4 7.9 7.9-7.9 7.9-1.4-1.4Z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="interview-points.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
